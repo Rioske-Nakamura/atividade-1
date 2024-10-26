@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Alunos</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Tabela de Alunos</h1>
+    <table id="tabela-alunos">
+        <thead>
+            <tr>
+                <th>RA</th>
+                <th>Nome</th>
+                <th>Educacenso</th>
+                <th>Data de Nascimento</th>
+                <th>Idade</th>
+                <th>CPF</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function carregarAlunos() {
+            try {
+                const response = await fetch('/alunos');
+                
+                const dados = await response.json();
+                console.log('Dados recebidos da API:', dados);
+
+                const tabelaBody = document.querySelector('#tabela-alunos tbody');
+                tabelaBody.innerHTML = ''; 
+
+                dados.forEach(aluno => {
+                    const row = `
+                        <tr>
+                            <td>${aluno.ra}</td>
+                            <td>${aluno.nome}</td>
+                            <td>${aluno.educacenso}</td>
+                            <td>${new Date (aluno.datanacimento).toLocaleDateString('pt-BR')}</td>
+                            <td>${aluno.idade}</td>
+                            <td>${aluno.cpf}</td>
+                        </tr>`;
+                    tabelaBody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Erro ao carregar dados:", error);
+            }
+        }
+
+        carregarAlunos();
+    </script>
+</body>
+</html>
